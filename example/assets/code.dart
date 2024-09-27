@@ -1,5 +1,4 @@
 class ReEditor {
-
   final String foo;
   final String bar;
 
@@ -8,5 +7,4 @@ class ReEditor {
   void hello(String name) {
     print('hello $name');
   }
-
 }

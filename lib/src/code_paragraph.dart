@@ -1,7 +1,6 @@
 part of re_editor;
 
 abstract class IParagraph {
-
   double get width;
   double get height;
   double get preferredLineHeight;
@@ -13,7 +12,7 @@ abstract class IParagraph {
   TextPosition getPosition(Offset offset);
 
   TextRange getWord(Offset offset);
-  
+
   InlineSpan? getSpanForPosition(TextPosition position);
 
   TextRange getRangeForSpan(InlineSpan span);
@@ -23,5 +22,4 @@ abstract class IParagraph {
   Offset? getOffset(TextPosition position);
 
   List<Rect> getRangeRects(TextRange range);
-
 }

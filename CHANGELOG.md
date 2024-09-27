@@ -58,3 +58,7 @@
 * Fix controller delegate memory leak issue.
 * Fix issue `xxx is used after being disposed`.
 * Fix the bug that the underlying text will be selected when trying to click-drag the scroll bar.
+
+
+## 0.4.1
+* Feat: Support for AST formed by antlr.

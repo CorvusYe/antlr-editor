@@ -396,6 +396,10 @@ class _CodeEditableState extends State<_CodeEditable>
         value: widget.controller.value,
         onAutocomplete: (value) {
           autocompleteState.dismiss();
+          if (value.replaceBefore) {
+            replaceBefore(value);
+            return;
+          }
           final CodeLineSelection selection = widget.controller.selection;
           widget.controller.replaceSelection(value.text);
           widget.controller.selection = selection.copyWith(
@@ -403,6 +407,17 @@ class _CodeEditableState extends State<_CodeEditable>
             extentOffset: selection.extentOffset + value.selection.extentOffset,
           );
         });
+  }
+
+  void replaceBefore(CodeAutocompleteResult value) {
+    widget.controller.replaceSelection(
+      value.text,
+      widget.controller.value.selection.copyWith(
+        baseOffset: widget.controller.value.selection.base.offset -
+            value.selection.extentOffset,
+        extentOffset: widget.controller.value.selection.base.offset,
+      ),
+    );
   }
 }
 

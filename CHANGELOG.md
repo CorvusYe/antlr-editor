@@ -62,3 +62,6 @@
 
 ## 0.4.1
 * Feat: Support for AST formed by antlr.
+  > * 支持antlr支持由antlr生成的抽象语法树高亮。
+* Feat: Enhance autocomplete, support case-insensitive and fully use keywords.
+  > * 增强自动补全，支持大小写不敏感与完全使用关键字。

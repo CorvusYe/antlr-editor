@@ -4,7 +4,8 @@ part of re_editor;
 ///
 /// See also [CodeKeywordPrompt], [CodeFieldPrompt] and [CodeFunctionPrompt].
 abstract class CodePrompt {
-  const CodePrompt({required this.word});
+  final bool caseSensitive;
+  const CodePrompt({required this.word, this.caseSensitive = true});
 
   /// Content associated with user input.
   ///
@@ -23,7 +24,7 @@ abstract class CodePrompt {
 
 /// The keyword autocomplate prompt. such as 'return', 'class', 'new' and so on.
 class CodeKeywordPrompt extends CodePrompt {
-  const CodeKeywordPrompt({required super.word});
+  const CodeKeywordPrompt({required super.word, super.caseSensitive = true});
 
   @override
   CodeAutocompleteResult get autocomplete =>
@@ -31,7 +32,10 @@ class CodeKeywordPrompt extends CodePrompt {
 
   @override
   bool match(String input) {
-    return word != input && word.startsWith(input);
+    return word != input &&
+        (caseSensitive
+            ? word.startsWith(input)
+            : word.toLowerCase().startsWith(input.toLowerCase()));
   }
 
   @override
@@ -140,7 +144,11 @@ class CodeFunctionPrompt extends CodePrompt {
 /// The autocomplete result selected by user, the editor will apply this
 /// to code content.
 class CodeAutocompleteResult {
-  const CodeAutocompleteResult({required this.text, required this.selection});
+  const CodeAutocompleteResult({
+    required this.text,
+    required this.selection,
+    this.replaceBefore = false,
+  });
 
   factory CodeAutocompleteResult.fromText(String text) {
     return CodeAutocompleteResult(
@@ -154,6 +162,8 @@ class CodeAutocompleteResult {
 
   /// The new selection after the autocompletion.
   final TextSelection selection;
+
+  final bool replaceBefore;
 }
 
 /// The current user input and prompts for editing a run of text.
@@ -186,9 +196,21 @@ class CodeAutocompleteEditingValue {
   }
 
   CodeAutocompleteResult get autocomplete {
-    final CodeAutocompleteResult result = prompts[index].autocomplete;
+    var selectedPrompt = prompts[index];
+    final CodeAutocompleteResult result = selectedPrompt.autocomplete;
     if (result.text.isEmpty) {
       return result;
+    }
+
+    if (!selectedPrompt.caseSensitive) {
+      return CodeAutocompleteResult(
+        text: result.text,
+        replaceBefore: true,
+        selection: result.selection.copyWith(
+          baseOffset: result.selection.baseOffset,
+          extentOffset: input.length,
+        ),
+      );
     }
     final String finalText = result.text.substring(input.length);
     final TextSelection finalSelection = result.selection.copyWith(

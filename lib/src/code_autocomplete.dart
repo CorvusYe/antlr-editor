@@ -58,6 +58,7 @@ class CodeFieldPrompt extends CodePrompt {
   const CodeFieldPrompt({
     required super.word,
     required this.type,
+    super.caseSensitive = true,
     this.customAutocomplete,
   });
 

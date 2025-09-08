@@ -432,9 +432,12 @@ class _CodeInputController extends ChangeNotifier implements DeltaTextInputClien
   void _openInputConnection() {
     if (!_hasInputConnection) {
       final TextInputConnection connection = TextInput.attach(this,
-        const TextInputConfiguration(
+        TextInputConfiguration(
           enableDeltaModel: true,
-          inputAction: TextInputAction.newline
+          inputAction: TextInputAction.newline,
+          viewId: _editorKey?.currentContext != null
+              ? View.of(_editorKey!.currentContext!).viewId
+              : null,
         ),
       );
       _remoteEditingValue = _buildTextEditingValue();

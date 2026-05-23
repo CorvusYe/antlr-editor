@@ -91,6 +91,9 @@ class _CodeInputController extends ChangeNotifier implements DeltaTextInputClien
   TextRange get composing => _controller.composing;
 
   @override
+  bool onFocusReceived() => false;
+
+  @override
   void connectionClosed() {
   }
 
